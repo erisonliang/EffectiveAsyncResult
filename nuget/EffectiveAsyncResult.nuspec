@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EffectiveAsyncResult</id>
+    <version>1.0.1.0</version>
+    <authors>Peter Ritchie</authors>
+    <owners>Peter Ritchie</owners>
+    <licenseUrl>https://github.com/peteraritchie/EffectiveAsyncResult/raw/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/peteraritchie/EffectiveAsyncResult</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Minimal, lock-free, IAsyncResult implementation for .NET 4.x</description>
+    <releaseNotes>Added .NET 4.5 support</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>IAsyncResult Asynchronous Programming Model</tags>
+  </metadata>
+</package>
