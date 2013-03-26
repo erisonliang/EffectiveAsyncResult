@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
 using EffectiveAsyncResult;
 using PRI.ProductivityExtensions.ReflectionExtensions;
@@ -7,14 +6,44 @@ using Xunit;
 
 namespace Tests
 {
-	public class when_asyncresult_without_state_is_used : IDisposable
+	public class when_asyncresult_with_state_is_used : IDisposable
 	{
-		private AsyncResult<int> asyncResult;
+		private AsyncResult<string> asyncResult;
 		private int callbackWasInvoked;
+		private static readonly object TheStateObject = new object();
 
-		public when_asyncresult_without_state_is_used()
+		public when_asyncresult_with_state_is_used()
 		{
-			asyncResult = new AsyncResult<int>(ar => Thread.VolatileWrite(ref callbackWasInvoked, 1), null);
+			asyncResult = new AsyncResult<string>(ar => Thread.VolatileWrite(ref callbackWasInvoked, 1), TheStateObject);
+		}
+
+		[Fact]
+		public void then_has_correct_state_before_completion()
+		{
+			Assert.Same(TheStateObject, asyncResult.AsyncState);
+		}
+
+		[Fact]
+		public void then_has_correct_state_after_completion()
+		{
+			asyncResult.Complete(true);
+			Assert.Same(TheStateObject, asyncResult.AsyncState);
+		}
+
+		[Fact]
+		public void then_has_correct_state_after_completion_with_result()
+		{
+			var expectedResult = "42";
+			asyncResult.Complete(true, expectedResult);
+			Assert.Same(TheStateObject, asyncResult.AsyncState);
+		}
+
+		[Fact]
+		public void then_has_value_after_completion()
+		{
+			var expectedResult = "42";
+			asyncResult.Complete(true, expectedResult);
+			Assert.Equal(expectedResult, asyncResult.End());
 		}
 
 		[Fact]
@@ -22,23 +51,6 @@ namespace Tests
 		{
 			var value = asyncResult.GetPrivateFieldValue<WaitHandle>("asyncWaitHandle");
 			Assert.Null(value);
-		}
-
-		[Fact]
-		public void then_has_value_after_completion()
-		{
-			var expectedResult = 42;
-			asyncResult.Complete(true, expectedResult);
-			Assert.Equal(expectedResult, asyncResult.End());
-		}
-
-		[Fact]
-		public void then_completion_cause_calback_invocation()
-		{
-			asyncResult.Complete(true, 42);
-			// give the thread-pool thread time to invoke the callback
-			Thread.Sleep(100);
-			Assert.Equal(1, callbackWasInvoked);
 		}
 
 		[Fact]
@@ -65,7 +77,6 @@ namespace Tests
 		[Fact]
 		public void then_completed_asyncresult_waithandle_property_is_set_after_waithandle_created()
 		{
-			// force creation of the WaitHandle;
 			var temp = asyncResult.AsyncWaitHandle;
 			asyncResult.Complete(true);
 			Assert.True(asyncResult.AsyncWaitHandle.WaitOne(0));

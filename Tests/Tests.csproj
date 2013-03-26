@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="geschikt, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ProductivityExtensions.1.0.17.0\lib\net40-client\geschikt.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,8 +48,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="when_asyncressult_completes_on_different_thread.cs" />
+    <Compile Include="when_asyncresult_is_used_with_operation_throwing_exception.cs" />
     <Compile Include="when_asyncresult_without_state_is_used.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="when_asyncresult_with_state_is_used.cs" />
+    <Compile Include="when_using_async_in_apm_implementation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
